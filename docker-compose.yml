@@ -9,12 +9,13 @@ services:
      - db
      - mailcatcher
     environment:
-     - VIRTUAL_HOST=social.dev
      - DRUPAL_SETTINGS=development
-    ports:
-     - "80"
     network_mode: "bridge"
     container_name: social_web
+    labels:
+      - 'traefik.backend=web'
+      - 'traefik.port=80'
+      - 'traefik.frontend.rule=Host:eegage-social.dev'
 
   db:
     image: mysql:5.6
@@ -23,21 +24,18 @@ services:
       - MYSQL_DATABASE=social
     volumes:
       - db_data:/var/lib/mysql
-    ports:
-      - "3307:3306"
     network_mode: "bridge"
     container_name: social_db
     command: mysqld --max_allowed_packet=16M
 
   mailcatcher:
     image: schickling/mailcatcher
-    environment:
-      - VIRTUAL_HOST=mailcatcher.social.dev
-      - VIRTUAL_PORT=1080
-    ports:
-      - "1080"
     network_mode: "bridge"
     container_name: social_mailcatcher
+    labels:
+      - 'traefik.backend=mailcatcher'
+      - 'traefik.port=1080'
+      - 'traefik.frontend.rule=Host:mailcatcher.eegage-social.dev'
 
   selenium:
     image: selenium/standalone-firefox-debug:2.48.2
