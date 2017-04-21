@@ -10,7 +10,6 @@ services:
      - mailcatcher
     environment:
      - DRUPAL_SETTINGS=development
-    network_mode: "bridge"
     container_name: social_web
     labels:
       - 'traefik.backend=web'
@@ -24,13 +23,11 @@ services:
       - MYSQL_DATABASE=social
     volumes:
       - db_data:/var/lib/mysql
-    network_mode: "bridge"
     container_name: social_db
     command: mysqld --max_allowed_packet=16M
 
   mailcatcher:
     image: schickling/mailcatcher
-    network_mode: "bridge"
     container_name: social_mailcatcher
     labels:
       - 'traefik.backend=mailcatcher'
@@ -47,7 +44,6 @@ services:
     cap_add:
      - NET_ADMIN
      - NET_RAW
-    network_mode: "bridge"
     container_name: social_selenium
 
   behat:
@@ -60,7 +56,6 @@ services:
      - selenium:selenium
     environment:
      - DRUPAL_SETTINGS=development
-    network_mode: "bridge"
     container_name: social_behat
 
   cron:
@@ -72,7 +67,6 @@ services:
      - mailcatcher
     environment:
      - DRUPAL_SETTINGS=development
-    network_mode: "bridge"
     container_name: social_cron
 
 volumes:
